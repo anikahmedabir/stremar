@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anikx Streamer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --bg: #000000;
+    --surface: #0a0a0a;
+    --surface-2: #111111;
+    --border: #1f1f1f;
+    --border-hover: #2a2a2a;
+    --text: #ededed;
+    --text-dim: #888888;
+    --text-dimmer: #555555;
+    --accent: #ffffff;
+    --green: #00d97e;
+    --red: #ff4757;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --yellow: #f59e0b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Header */
+.header {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #000;
+    font-weight: 800;
+}
+
+.brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.brand-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Page Title */
+.page-title {
+    margin-bottom: 32px;
+}
+
+.page-title h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+.page-title p {
+    font-size: 14px;
+    color: var(--text-dim);
+}
+
+/* Stats Grid */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.stat {
+    background: var(--surface);
+    padding: 24px;
+    transition: background 0.2s;
+    position: relative;
+}
+
+.stat:hover {
+    background: var(--surface-2);
+}
+
+.stat-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.stat-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--text-dimmer);
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-meta {
+    font-size: 12px;
+    color: var(--text-dimmer);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-meta.positive { color: var(--green); }
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+    .stats { grid-template-columns: 1fr; }
+}
+
+/* Card */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.card-title-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--text-dim);
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* Chart */
+.chart-wrap {
+    position: relative;
+    height: 260px;
+}
+
+/* Commands */
+.command {
+    padding: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    transition: all 0.2s;
+}
+
+.command:last-child { margin-bottom: 0; }
+
+.command:hover {
+    border-color: var(--border-hover);
+    background: var(--surface);
+}
+
+.command-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.command-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.command-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--surface-2);
+    color: var(--text-dim);
+}
+
+.command-tag.install { background: rgba(0, 217, 126, 0.1); color: var(--green); }
+.command-tag.remove { background: rgba(255, 71, 87, 0.1); color: var(--red); }
+
+.command-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    background: transparent;
+    word-break: break-all;
+    user-select: all;
+    cursor: pointer;
+    line-height: 1.6;
+}
+
+.command-hint {
+    font-size: 11px;
+    color: var(--text-dimmer);
+    margin-top: 6px;
+    text-align: right;
+}
+
+/* Activity Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.table th {
+    text-align: left;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+}
+
+.table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: var(--surface-2); }
+
+.table .action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.action.setup { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
+.action.remove { background: rgba(255, 71, 87, 0.12); color: #f87171; }
+.action.exe { background: rgba(0, 217, 126, 0.12); color: #34d399; }
+.action.dll { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
+
+.ip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+}
+
+.time {
+    color: var(--text-dimmer);
+    font-size: 12px;
+}
+
+.empty {
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--text-dimmer);
+    font-size: 13px;
+}
+
+/* Footer */
+.footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-dimmer);
+    font-size: 12px;
+    margin-top: 40px;
+}
+
+/* Utility */
+.hidden { display: none; }
+
+.copy-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--surface);
+    border: 1px solid var(--border-hover);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+}
+
+.copy-toast.show {
+    transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-mark">A</div>
+                <div>
+                    <div class="brand-name">Anikx Streamer</div>
+                    <div class="brand-sub" id="statusText">Connecting...</div>
+                </div>
+            </div>
+            <div class="status-pill">
+                <span class="status-dot"></span>
+                <span>Live</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <div class="page-title">
+        <h1>Dashboard</h1>
+        <p>Real-time statistics and setup commands</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-label">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                Total Downloads
+            </div>
+            <div class="stat-value" id="statDownloads">0</div>
+            <div class="stat-meta" id="metaDownloads">All time</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+                Setup Runs
+            </div>
+            <div class="stat-value" id="statSetups">0</div>
+            <div class="stat-meta" id="metaSetups">All time</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Uninstalls
+            </div>
+            <div class="stat-value" id="statRemoves">0</div>
+            <div class="stat-meta" id="metaRemoves">All time</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">
+                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/>
+                </svg>
+                Active Users
+            </div>
+            <div class="stat-value" id="statUsers">0</div>
+            <div class="stat-meta positive" id="metaUsers">
+                <span>●</span> Live now
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid">
+        <!-- Chart -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>
+                    </svg>
+                    Activity — Last 7 Days
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrap">
+                    <canvas id="chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commands -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    Commands
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="command">
+                    <div class="command-header">
+                        <div class="command-label">Install</div>
+                        <div class="command-tag install">POWERSHELL</div>
+                    </div>
+                    <div class="command-code" id="cmdInstall" onclick="copyCmd(this)">Loading...</div>
+                    <div class="command-hint">Click to copy · Run as Admin</div>
+                </div>
+                <div class="command">
+                    <div class="command-header">
+                        <div class="command-label">Uninstall</div>
+                        <div class="command-tag remove">POWERSHELL</div>
+                    </div>
+                    <div class="command-code" id="cmdRemove" onclick="copyCmd(this)">Loading...</div>
+                    <div class="command-hint">Click to copy · Run as Admin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 8v4l3 3M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                </svg>
+                Recent Activity
+            </div>
+        </div>
+        <div id="activityBody">
+            <div class="empty">Loading...</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2024 Anikx Streamer · Powered by Render
+    </footer>
+</div>
+
+<div class="copy-toast" id="toast">Copied to clipboard</div>
+
+<script>
+// ============================================================
+// Config
+// ============================================================
+const baseUrl = window.location.origin;
+const REFRESH = 5000;
+
+// ============================================================
+// Commands
+// ============================================================
+document.getElementById('cmdInstall').textContent = `irm "${baseUrl}/setup.ps1" | iex`;
+document.getElementById('cmdRemove').textContent = `irm "${baseUrl}/remove.ps1" | iex`;
+
+// ============================================================
+// Toast
+// ============================================================
+let toastTimer;
+function showToast(msg = 'Copied to clipboard') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+function copyCmd(el) {
+    navigator.clipboard.writeText(el.textContent);
+    showToast('Command copied');
+}
+
+// ============================================================
+// Animate counter
+// ============================================================
+function setValue(el, newVal) {
+    const oldVal = parseInt(el.textContent) || 0;
+    if (oldVal === newVal) return;
+    
+    const duration = 600;
+    const start = performance.now();
+    
+    function step(t) {
+        const p = Math.min((t - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(oldVal + (newVal - oldVal) * eased);
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = newVal;
+    }
+    requestAnimationFrame(step);
+}
+
+// ============================================================
+// Chart
+// ============================================================
+let chart;
+
+function initChart(labels, data) {
+    const ctx = document.getElementById('chart').getContext('2d');
+    
+    const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                data,
+                borderColor: '#ffffff',
+                backgroundColor: gradient,
+                borderWidth: 2,
+                fill: true,
+                tension: 0.35,
+                pointRadius: 0,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#ffffff',
+                pointHoverBorderColor: '#000',
+                pointHoverBorderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#0a0a0a',
+                    borderColor: '#2a2a2a',
+                    borderWidth: 1,
+                    padding: 10,
+                    titleColor: '#888',
+                    titleFont: { size: 11, weight: '600' },
+                    bodyColor: '#ededed',
+                    bodyFont: { size: 13, weight: '600' },
+                    displayColors: false,
+                    cornerRadius: 8
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#1a1a1a', drawBorder: false },
+                    ticks: { color: '#555', font: { size: 11 }, padding: 8 },
+                    border: { display: false }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#555', font: { size: 11 }, padding: 8 },
+                    border: { display: false }
+                }
+            }
+        }
+    });
+}
+
+// ============================================================
+// Fetch
+// ============================================================
+async function fetchStats() {
+    try {
+        const res = await fetch('/api/stats');
+        const data = await res.json();
+        
+        if (data.status !== 'ok') return;
+        const s = data.stats;
+        
+        // Update values
+        setValue(document.getElementById('statDownloads'), s.totalDownloads);
+        setValue(document.getElementById('statSetups'), s.totalSetups);
+        setValue(document.getElementById('statRemoves'), s.totalRemoves);
+        setValue(document.getElementById('statUsers'), s.activeUsers);
+        
+        // Status
+        document.getElementById('statusText').textContent = 'Connected';
+        
+        // Activity
+        const body = document.getElementById('activityBody');
+        if (s.recentActivity.length === 0) {
+            body.innerHTML = '<div class="empty">No activity yet</div>';
+        } else {
+            const rows = s.recentActivity.slice(0, 10).map(a => {
+                const action = 
+                    a.action === 'SETUP' ? 'setup' :
+                    a.action === 'REMOVE' ? 'remove' :
+                    a.action.endsWith('.exe') ? 'exe' : 'dll';
+                
+                const label = 
+                    a.action === 'SETUP' ? 'Setup' :
+                    a.action === 'REMOVE' ? 'Remove' :
+                    a.action.endsWith('.exe') ? 'EXE' : 'DLL';
+                
+                return `
+                    <tr>
+                        <td><span class="action ${action}">${label}</span></td>
+                        <td><span class="ip">${a.ip}</span></td>
+                        <td><span class="time">${new Date(a.time).toLocaleTimeString()}</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            body.innerHTML = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>IP Address</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+        
+        // Chart
+        const dates = Object.keys(s.dailyStats).sort().slice(-7);
+        const counts = dates.map(d => s.dailyStats[d].setups + s.dailyStats[d].exe + s.dailyStats[d].dll);
+        const labels = dates.map(d => {
+            const date = new Date(d);
+            return date.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+        });
+        
+        if (chart) {
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = counts;
+            chart.update('none');
+        } else if (dates.length > 0) {
+            initChart(labels, counts);
+        } else {
+            initChart(['—'], [0]);
+        }
+    } catch (err) {
+        document.getElementById('statusText').textContent = 'Disconnected';
+    }
+}
+
+// ============================================================
+// Loop
+// ============================================================
+fetchStats();
+setInterval(fetchStats, REFRESH);
+
+// Heartbeat
+function heartbeat() {
+    fetch('/api/heartbeat', { method: 'POST' }).catch(() => {});
+}
+heartbeat();
+setInterval(heartbeat, 60000);
+</script>
+</body>
+</html>
