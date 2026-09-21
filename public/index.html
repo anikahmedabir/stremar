@@ -41,11 +41,10 @@ html, body {
     min-height: 100vh;
 }
 
-/* Container */
 .container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 24px 64px;
 }
 
 /* Header */
@@ -66,6 +65,8 @@ html, body {
     display: flex;
     align-items: center;
     gap: 12px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .brand-mark {
@@ -93,6 +94,12 @@ html, body {
     font-weight: 500;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .status-pill {
     display: inline-flex;
     align-items: center;
@@ -118,6 +125,22 @@ html, body {
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
+}
+
+.btn-admin-top {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.btn-admin-top:hover {
+    color: #fff;
+    border-color: var(--border-hover);
 }
 
 /* Page Title */
@@ -149,43 +172,42 @@ html, body {
     margin-bottom: 32px;
 }
 
-.stat {
+.stat-card {
     background: var(--surface);
     padding: 24px;
-    transition: background 0.2s;
-    position: relative;
+    transition: background 0.15s;
 }
 
-.stat:hover {
+.stat-card:hover {
     background: var(--surface-2);
 }
 
-.stat-label {
+.stat-header {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    margin-bottom: 16px;
     color: var(--text-dim);
+    font-size: 13px;
     font-weight: 500;
-    margin-bottom: 12px;
 }
 
-.stat-icon {
+.stat-header svg {
     width: 16px;
     height: 16px;
-    color: var(--text-dimmer);
+    opacity: 0.6;
 }
 
 .stat-value {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 36px;
+    font-weight: 800;
     letter-spacing: -0.03em;
-    font-variant-numeric: tabular-nums;
     line-height: 1;
     margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
 }
 
-.stat-meta {
+.stat-footer {
     font-size: 12px;
     color: var(--text-dimmer);
     display: flex;
@@ -193,225 +215,267 @@ html, body {
     gap: 6px;
 }
 
-.stat-meta.positive { color: var(--green); }
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+}
 
-/* Grid Layout */
-.grid {
+/* Main Grid */
+.main-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.6fr 1fr;
     gap: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
-@media (max-width: 900px) {
-    .grid { grid-template-columns: 1fr; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 500px) {
-    .stats { grid-template-columns: 1fr; }
-}
-
-/* Card */
-.card {
+/* Panels */
+.panel {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    overflow: hidden;
+    padding: 24px;
 }
 
-.card-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--border);
+.panel-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    margin-bottom: 20px;
 }
 
-.card-title {
+.panel-title {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 14px;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    color: var(--text);
 }
 
-.card-title-icon {
+.panel-title svg {
     width: 16px;
     height: 16px;
     color: var(--text-dim);
 }
 
-.card-body {
-    padding: 24px;
-}
-
 /* Chart */
-.chart-wrap {
+.chart-container {
     position: relative;
-    height: 260px;
+    height: 240px;
 }
 
-/* Commands */
-.command {
-    padding: 16px;
-    background: var(--bg);
+/* Command Cards */
+.command-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.command-card {
+    background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 12px;
-    transition: all 0.2s;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.15s;
+    cursor: pointer;
+    position: relative;
 }
 
-.command:last-child { margin-bottom: 0; }
-
-.command:hover {
+.command-card:hover {
     border-color: var(--border-hover);
-    background: var(--surface);
+    transform: translateY(-1px);
 }
 
-.command-header {
+.command-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
 }
 
-.command-label {
+.command-type {
     font-size: 11px;
-    font-weight: 600;
-    color: var(--text-dim);
-    text-transform: uppercase;
+    font-weight: 700;
     letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
-.command-tag {
+.command-type.install { color: var(--text-dim); }
+.command-type.uninstall { color: var(--text-dim); }
+.command-type.hwid { color: var(--blue); }
+
+.command-badge {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
     font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 100px;
-    background: var(--surface-2);
-    color: var(--text-dim);
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
-.command-tag.install { background: rgba(0, 217, 126, 0.1); color: var(--green); }
-.command-tag.remove { background: rgba(255, 71, 87, 0.1); color: var(--red); }
+.badge-green { background: rgba(0, 217, 126, 0.1); color: var(--green); }
+.badge-red { background: rgba(255, 71, 87, 0.1); color: var(--red); }
+.badge-blue { background: rgba(59, 130, 246, 0.1); color: var(--blue); }
 
 .command-code {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     color: var(--text);
-    background: transparent;
+    background: #000;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
     word-break: break-all;
-    user-select: all;
-    cursor: pointer;
-    line-height: 1.6;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-.command-hint {
+.command-desc {
     font-size: 11px;
     color: var(--text-dimmer);
-    margin-top: 6px;
     text-align: right;
 }
 
-/* Activity Table */
-.table {
+/* Recent Activity Table */
+.activity-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.activity-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
 }
 
-.table th {
+.activity-table th {
     text-align: left;
-    padding: 12px 20px;
     font-size: 11px;
     font-weight: 600;
-    color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    color: var(--text-dimmer);
+    padding: 12px 16px;
     border-bottom: 1px solid var(--border);
-    background: var(--surface);
 }
 
-.table td {
-    padding: 14px 20px;
+.activity-table td {
+    padding: 14px 16px;
+    font-size: 13px;
     border-bottom: 1px solid var(--border);
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-}
-
-.table tr:last-child td { border-bottom: none; }
-.table tr:hover td { background: var(--surface-2); }
-
-.table .action {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.action.setup { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
-.action.remove { background: rgba(255, 71, 87, 0.12); color: #f87171; }
-.action.exe { background: rgba(0, 217, 126, 0.12); color: #34d399; }
-.action.dll { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
-
-.ip {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
     color: var(--text-dim);
 }
 
-.time {
-    color: var(--text-dimmer);
-    font-size: 12px;
+.activity-table tr:last-child td {
+    border-bottom: none;
 }
 
-.empty {
-    padding: 48px 20px;
-    text-align: center;
-    color: var(--text-dimmer);
-    font-size: 13px;
+.action-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
 }
 
-/* Footer */
-.footer {
-    padding: 32px 0;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    color: var(--text-dimmer);
-    font-size: 12px;
-    margin-top: 40px;
-}
+.action-pill.setup { background: rgba(59, 130, 246, 0.15); color: var(--blue); }
+.action-pill.remove { background: rgba(255, 71, 87, 0.15); color: var(--red); }
+.action-pill.auth { background: rgba(0, 217, 126, 0.15); color: var(--green); }
+.action-pill.exe { background: rgba(139, 92, 246, 0.15); color: var(--purple); }
+.action-pill.dll { background: rgba(245, 158, 11, 0.15); color: var(--yellow); }
 
-/* Utility */
-.hidden { display: none; }
-
-.copy-toast {
+/* Toast */
+.toast {
     position: fixed;
     bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--surface);
+    right: 24px;
+    background: var(--surface-2);
     border: 1px solid var(--border-hover);
+    color: var(--text);
     padding: 10px 16px;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 13px;
     font-weight: 500;
-    color: var(--text);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 9999;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 1000;
 }
 
-.copy-toast.show {
-    transform: translateX(-50%) translateY(0);
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 860px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    position: relative;
+}
+.modal-close-btn {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+}
+.modal-close-btn:hover { color: #fff; }
+
+.input-styled {
+    background: #000;
+    border: 1px solid var(--border);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+}
+.input-styled:focus { border-color: var(--accent); }
+
+.btn-styled {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .main-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -421,16 +485,19 @@ html, body {
     <!-- Header -->
     <header class="header">
         <div class="header-inner">
-            <div class="brand">
+            <a href="#" class="brand">
                 <div class="brand-mark">A</div>
                 <div>
                     <div class="brand-name">Anikx Streamer</div>
-                    <div class="brand-sub" id="statusText">Connecting...</div>
+                    <div class="brand-sub">Connected</div>
                 </div>
-            </div>
-            <div class="status-pill">
-                <span class="status-dot"></span>
-                <span>Live</span>
+            </a>
+            <div class="header-right">
+                <div class="status-pill">
+                    <span class="status-dot"></span>
+                    Live
+                </div>
+                <button class="btn-admin-top" onclick="openAdminModal()">Admin Panel</button>
             </div>
         </div>
     </header>
@@ -441,334 +508,463 @@ html, body {
         <p>Real-time statistics and setup commands</p>
     </div>
 
-    <!-- Stats -->
+    <!-- Stats Grid -->
     <div class="stats">
-        <div class="stat">
-            <div class="stat-label">
-                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-                </svg>
+        <div class="stat-card">
+            <div class="stat-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Total Downloads
             </div>
             <div class="stat-value" id="statDownloads">0</div>
-            <div class="stat-meta" id="metaDownloads">All time</div>
+            <div class="stat-footer">All time</div>
         </div>
-        <div class="stat">
-            <div class="stat-label">
-                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2v4M12 22v-4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M22 12h-4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                </svg>
+        <div class="stat-card">
+            <div class="stat-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 Setup Runs
             </div>
             <div class="stat-value" id="statSetups">0</div>
-            <div class="stat-meta" id="metaSetups">All time</div>
+            <div class="stat-footer">All time</div>
         </div>
-        <div class="stat">
-            <div class="stat-label">
-                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                </svg>
+        <div class="stat-card">
+            <div class="stat-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                 Uninstalls
             </div>
             <div class="stat-value" id="statRemoves">0</div>
-            <div class="stat-meta" id="metaRemoves">All time</div>
+            <div class="stat-footer">All time</div>
         </div>
-        <div class="stat">
-            <div class="stat-label">
-                <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M13 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/>
-                </svg>
+        <div class="stat-card">
+            <div class="stat-header">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 Active Users
             </div>
-            <div class="stat-value" id="statUsers">0</div>
-            <div class="stat-meta positive" id="metaUsers">
-                <span>●</span> Live now
-            </div>
+            <div class="stat-value" id="statActive">0</div>
+            <div class="stat-footer"><span class="live-dot"></span> Live now</div>
         </div>
     </div>
 
-    <!-- Grid -->
-    <div class="grid">
-        <!-- Chart -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>
-                    </svg>
+    <!-- Main 2-Column Grid -->
+    <div class="main-grid">
+        <!-- Chart Panel -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                     Activity — Last 7 Days
                 </div>
             </div>
-            <div class="card-body">
-                <div class="chart-wrap">
-                    <canvas id="chart"></canvas>
-                </div>
+            <div class="chart-container">
+                <canvas id="activityChart"></canvas>
             </div>
         </div>
 
-        <!-- Commands -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                    </svg>
+        <!-- Commands Panel -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
                     Commands
                 </div>
             </div>
-            <div class="card-body">
-                <div class="command">
-                    <div class="command-header">
-                        <div class="command-label">Install</div>
-                        <div class="command-tag install">POWERSHELL</div>
+            <div class="command-list">
+                <!-- HWID Finder Card -->
+                <div class="command-card" onclick="copyCommand('cmdHwid')">
+                    <div class="command-card-header">
+                        <span class="command-type hwid">FIND HWID</span>
+                        <span class="command-badge badge-blue">POWERSHELL</span>
                     </div>
-                    <div class="command-code" id="cmdInstall" onclick="copyCmd(this)">Loading...</div>
-                    <div class="command-hint">Click to copy · Run as Admin</div>
+                    <div class="command-code" id="cmdHwid">irm "https://streamer.anikxcheatx.com/hwid.ps1" | iex</div>
+                    <div class="command-desc">Click to copy • Get your PC HWID</div>
                 </div>
-                <div class="command">
-                    <div class="command-header">
-                        <div class="command-label">Uninstall</div>
-                        <div class="command-tag remove">POWERSHELL</div>
+
+                <!-- Install Card -->
+                <div class="command-card" onclick="copyCommand('cmdInstall')">
+                    <div class="command-card-header">
+                        <span class="command-type install">INSTALL</span>
+                        <span class="command-badge badge-green">POWERSHELL</span>
                     </div>
-                    <div class="command-code" id="cmdRemove" onclick="copyCmd(this)">Loading...</div>
-                    <div class="command-hint">Click to copy · Run as Admin</div>
+                    <div class="command-code" id="cmdInstall">irm "https://streamer.anikxcheatx.com/setup.ps1" | iex</div>
+                    <div class="command-desc">Click to copy • Run as Admin</div>
+                </div>
+
+                <!-- Uninstall Card -->
+                <div class="command-card" onclick="copyCommand('cmdUninstall')">
+                    <div class="command-card-header">
+                        <span class="command-type uninstall">UNINSTALL</span>
+                        <span class="command-badge badge-red">POWERSHELL</span>
+                    </div>
+                    <div class="command-code" id="cmdUninstall" style="color: #f87171;">irm "https://streamer.anikxcheatx.com/remove.ps1" | iex</div>
+                    <div class="command-desc">Click to copy • Run as Admin</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Activity -->
-    <div class="card">
-        <div class="card-header">
-            <div class="card-title">
-                <svg class="card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 8v4l3 3M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-                </svg>
+    <!-- Recent Activity Table -->
+    <div class="activity-panel">
+        <div class="panel-header">
+            <div class="panel-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 Recent Activity
             </div>
         </div>
-        <div id="activityBody">
-            <div class="empty">Loading...</div>
-        </div>
+        <table class="activity-table">
+            <thead>
+                <tr>
+                    <th>ACTION</th>
+                    <th>IP ADDRESS</th>
+                    <th>TIME</th>
+                </tr>
+            </thead>
+            <tbody id="activityTableBody">
+                <tr><td colspan="3" style="text-align: center; color: var(--text-dimmer);">No recent activity recorded</td></tr>
+            </tbody>
+        </table>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        © 2024 Anikx Streamer · Powered by Render
-    </footer>
 </div>
 
-<div class="copy-toast" id="toast">Copied to clipboard</div>
+<!-- Admin Management Modal -->
+<div id="adminModal" class="modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close-btn" onclick="closeAdminModal()">&times;</button>
+        
+        <!-- Login View -->
+        <div id="adminLoginView" style="text-align: center; padding: 20px 0;">
+            <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Admin Login</h2>
+            <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 20px;">Enter password to manage HWID licenses</p>
+            <div style="max-width: 320px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px;">
+                <input type="password" id="adminPasswordInput" class="input-styled" placeholder="Password" onkeypress="if(event.key==='Enter') adminLogin()">
+                <button class="btn-styled" onclick="adminLogin()">Login</button>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="adminDashboardView" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                <div>
+                    <h2 style="font-size: 18px; font-weight: 700;">HWID License Manager</h2>
+                    <p style="font-size: 12px; color: var(--text-dim);">Create and manage client hardware IDs</p>
+                </div>
+                <button onclick="adminLogout()" style="background: transparent; border: 1px solid var(--border); color: var(--red); padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer;">Logout</button>
+            </div>
+
+            <!-- Add User -->
+            <div style="background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                <div style="font-size: 13px; font-weight: 600; margin-bottom: 12px;">+ Add New License</div>
+                <div style="display: grid; grid-template-columns: 1fr 2fr 1fr auto; gap: 8px;">
+                    <input type="text" id="newUsername" class="input-styled" placeholder="Username">
+                    <input type="text" id="newHwid" class="input-styled" placeholder="HWID (64-char SHA256)">
+                    <select id="newDuration" class="input-styled">
+                        <option value="1d">1 Day</option>
+                        <option value="7d">7 Days</option>
+                        <option value="30d">30 Days</option>
+                        <option value="90d">90 Days</option>
+                        <option value="lifetime" selected>Lifetime</option>
+                    </select>
+                    <button class="btn-styled" onclick="createUser()">Add</button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div style="overflow-x: auto;">
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>USER</th>
+                            <th>HWID</th>
+                            <th>EXPIRY</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr><td colspan="5" style="text-align: center;">No users registered yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast">Copied to clipboard</div>
 
 <script>
-// ============================================================
-// Config
-// ============================================================
-const baseUrl = window.location.origin;
-const REFRESH = 5000;
+let chartInstance = null;
+let adminToken = localStorage.getItem('anikx_admin_token') || '';
 
-// ============================================================
-// Commands
-// ============================================================
-document.getElementById('cmdInstall').textContent = `irm "${baseUrl}/setup.ps1" | iex`;
-document.getElementById('cmdRemove').textContent = `irm "${baseUrl}/remove.ps1" | iex`;
+// Auto domain resolution
+const origin = window.location.origin;
+document.getElementById('cmdHwid').innerText = `irm "${origin}/hwid.ps1" | iex`;
+document.getElementById('cmdInstall').innerText = `irm "${origin}/setup.ps1" | iex`;
+document.getElementById('cmdUninstall').innerText = `irm "${origin}/remove.ps1" | iex`;
 
-// ============================================================
-// Toast
-// ============================================================
-let toastTimer;
-function showToast(msg = 'Copied to clipboard') {
+function showToast(msg) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
+    t.innerText = msg;
     t.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+    setTimeout(() => t.classList.remove('show'), 2000);
 }
 
-function copyCmd(el) {
-    navigator.clipboard.writeText(el.textContent);
-    showToast('Command copied');
+function copyCommand(elemId) {
+    const text = document.getElementById(elemId).innerText;
+    navigator.clipboard.writeText(text);
+    showToast('Copied to clipboard');
 }
 
-// ============================================================
-// Animate counter
-// ============================================================
-function setValue(el, newVal) {
-    const oldVal = parseInt(el.textContent) || 0;
-    if (oldVal === newVal) return;
-    
-    const duration = 600;
-    const start = performance.now();
-    
-    function step(t) {
-        const p = Math.min((t - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.floor(oldVal + (newVal - oldVal) * eased);
-        if (p < 1) requestAnimationFrame(step);
-        else el.textContent = newVal;
+function copyRaw(str) {
+    navigator.clipboard.writeText(str);
+    showToast('HWID copied');
+}
+
+// Chart init
+function initChart(dailyStats) {
+    const ctx = document.getElementById('activityChart').getContext('2d');
+    const labels = [];
+    const setups = [];
+    const removes = [];
+
+    // Get last 7 days
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toISOString().split('T')[0];
+        labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        setups.push(dailyStats[key]?.setups || 0);
+        removes.push(dailyStats[key]?.removes || 0);
     }
-    requestAnimationFrame(step);
-}
 
-// ============================================================
-// Chart
-// ============================================================
-let chart;
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
 
-function initChart(labels, data) {
-    const ctx = document.getElementById('chart').getContext('2d');
-    
-    const gradient = ctx.createLinearGradient(0, 0, 0, 260);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    
-    chart = new Chart(ctx, {
+    chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-            labels,
-            datasets: [{
-                data,
-                borderColor: '#ffffff',
-                backgroundColor: gradient,
-                borderWidth: 2,
-                fill: true,
-                tension: 0.35,
-                pointRadius: 0,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: '#ffffff',
-                pointHoverBorderColor: '#000',
-                pointHoverBorderWidth: 2
-            }]
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Setups',
+                    data: setups,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 3
+                },
+                {
+                    label: 'Removes',
+                    data: removes,
+                    borderColor: '#ff4757',
+                    backgroundColor: 'rgba(255, 71, 87, 0.05)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 3
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: { intersect: false, mode: 'index' },
             plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#0a0a0a',
-                    borderColor: '#2a2a2a',
-                    borderWidth: 1,
-                    padding: 10,
-                    titleColor: '#888',
-                    titleFont: { size: 11, weight: '600' },
-                    bodyColor: '#ededed',
-                    bodyFont: { size: 13, weight: '600' },
-                    displayColors: false,
-                    cornerRadius: 8
-                }
+                legend: { display: false }
             },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: '#1a1a1a', drawBorder: false },
-                    ticks: { color: '#555', font: { size: 11 }, padding: 8 },
-                    border: { display: false }
-                },
                 x: {
-                    grid: { display: false },
-                    ticks: { color: '#555', font: { size: 11 }, padding: 8 },
-                    border: { display: false }
+                    grid: { color: '#1f1f1f' },
+                    ticks: { color: '#555', font: { family: 'Inter', size: 11 } }
+                },
+                y: {
+                    grid: { color: '#1f1f1f' },
+                    ticks: { color: '#555', font: { family: 'Inter', size: 11 }, stepSize: 1 },
+                    beginAtZero: true
                 }
             }
         }
     });
 }
 
-// ============================================================
-// Fetch
-// ============================================================
+// Fetch stats
 async function fetchStats() {
     try {
         const res = await fetch('/api/stats');
         const data = await res.json();
-        
-        if (data.status !== 'ok') return;
-        const s = data.stats;
-        
-        // Update values
-        setValue(document.getElementById('statDownloads'), s.totalDownloads);
-        setValue(document.getElementById('statSetups'), s.totalSetups);
-        setValue(document.getElementById('statRemoves'), s.totalRemoves);
-        setValue(document.getElementById('statUsers'), s.activeUsers);
-        
-        // Status
-        document.getElementById('statusText').textContent = 'Connected';
-        
-        // Activity
-        const body = document.getElementById('activityBody');
-        if (s.recentActivity.length === 0) {
-            body.innerHTML = '<div class="empty">No activity yet</div>';
-        } else {
-            const rows = s.recentActivity.slice(0, 10).map(a => {
-                const action = 
-                    a.action === 'SETUP' ? 'setup' :
-                    a.action === 'REMOVE' ? 'remove' :
-                    a.action.endsWith('.exe') ? 'exe' : 'dll';
-                
-                const label = 
-                    a.action === 'SETUP' ? 'Setup' :
-                    a.action === 'REMOVE' ? 'Remove' :
-                    a.action.endsWith('.exe') ? 'EXE' : 'DLL';
-                
-                return `
-                    <tr>
-                        <td><span class="action ${action}">${label}</span></td>
-                        <td><span class="ip">${a.ip}</span></td>
-                        <td><span class="time">${new Date(a.time).toLocaleTimeString()}</span></td>
-                    </tr>
-                `;
-            }).join('');
-            
-            body.innerHTML = `
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Action</th>
-                            <th>IP Address</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>${rows}</tbody>
-                </table>
-            `;
+        if (data.status === 'ok') {
+            const s = data.stats;
+            document.getElementById('statDownloads').innerText = s.totalDownloads || 0;
+            document.getElementById('statSetups').innerText = s.totalSetups || 0;
+            document.getElementById('statRemoves').innerText = s.totalRemoves || 0;
+            document.getElementById('statActive').innerText = s.activeUsers || 0;
+
+            initChart(s.dailyStats || {});
+            renderActivity(s.recentActivity || []);
         }
-        
-        // Chart
-        const dates = Object.keys(s.dailyStats).sort().slice(-7);
-        const counts = dates.map(d => s.dailyStats[d].setups + s.dailyStats[d].exe + s.dailyStats[d].dll);
-        const labels = dates.map(d => {
-            const date = new Date(d);
-            return date.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+    } catch (e) {}
+}
+
+function renderActivity(activities) {
+    const tbody = document.getElementById('activityTableBody');
+    if (!activities || activities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-dimmer);">No recent activity</td></tr>';
+        return;
+    }
+    tbody.innerHTML = activities.map(a => {
+        let pillClass = 'setup';
+        if (a.action.includes('REMOVE')) pillClass = 'remove';
+        else if (a.action.includes('AUTH')) pillClass = 'auth';
+        else if (a.action.includes('EXE')) pillClass = 'exe';
+        else if (a.action.includes('DLL')) pillClass = 'dll';
+
+        const timeStr = a.time ? new Date(a.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Just now';
+        return `
+            <tr>
+                <td><span class="action-pill ${pillClass}">${a.action}</span></td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">${a.ip || '127.0.0.1'}</td>
+                <td>${timeStr}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Admin Modal
+function openAdminModal() {
+    document.getElementById('adminModal').classList.add('show');
+    if (adminToken) showAdminDashboard();
+    else showAdminLogin();
+}
+
+function closeAdminModal() {
+    document.getElementById('adminModal').classList.remove('show');
+}
+
+function showAdminLogin() {
+    document.getElementById('adminLoginView').style.display = 'block';
+    document.getElementById('adminDashboardView').style.display = 'none';
+}
+
+function showAdminDashboard() {
+    document.getElementById('adminLoginView').style.display = 'none';
+    document.getElementById('adminDashboardView').style.display = 'block';
+    loadUsers();
+}
+
+async function adminLogin() {
+    const pwd = document.getElementById('adminPasswordInput').value;
+    try {
+        const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pwd })
         });
-        
-        if (chart) {
-            chart.data.labels = labels;
-            chart.data.datasets[0].data = counts;
-            chart.update('none');
-        } else if (dates.length > 0) {
-            initChart(labels, counts);
+        const data = await res.json();
+        if (data.status === 'ok') {
+            adminToken = data.token;
+            localStorage.setItem('anikx_admin_token', adminToken);
+            showAdminDashboard();
+            showToast('Admin logged in');
         } else {
-            initChart(['—'], [0]);
+            showToast('Incorrect password');
         }
-    } catch (err) {
-        document.getElementById('statusText').textContent = 'Disconnected';
+    } catch (e) {
+        showToast('Login error');
     }
 }
 
-// ============================================================
-// Loop
-// ============================================================
-fetchStats();
-setInterval(fetchStats, REFRESH);
-
-// Heartbeat
-function heartbeat() {
-    fetch('/api/heartbeat', { method: 'POST' }).catch(() => {});
+function adminLogout() {
+    adminToken = '';
+    localStorage.removeItem('anikx_admin_token');
+    showAdminLogin();
 }
-heartbeat();
-setInterval(heartbeat, 60000);
+
+async function loadUsers() {
+    try {
+        const res = await fetch('/api/admin/users', {
+            headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+            const tbody = document.getElementById('usersTableBody');
+            if (data.users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No users registered yet.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.users.map(u => `
+                <tr>
+                    <td><b>${u.username}</b></td>
+                    <td style="font-family: 'JetBrains Mono'; font-size: 11px;">
+                        ${u.hwid ? `<span style="color: #38bdf8; cursor:pointer;" onclick="copyRaw('${u.hwid}')" title="${u.hwid}">${u.hwid.substring(0, 16)}...</span>` : '<i>Empty</i>'}
+                    </td>
+                    <td style="font-family: 'JetBrains Mono'; font-size: 11px;">${u.expiry}</td>
+                    <td><span style="color: ${u.status === 'active' ? 'var(--green)' : 'var(--red)'}; font-weight: 600;">${u.status}</span></td>
+                    <td>
+                        <button onclick="toggleUser('${u.id}')" style="background:transparent; border:1px solid var(--border); color:#fff; padding:2px 6px; font-size:11px; border-radius:4px; cursor:pointer;">Toggle</button>
+                        <button onclick="deleteUser('${u.id}')" style="background:transparent; border:1px solid rgba(255,71,87,0.3); color:var(--red); padding:2px 6px; font-size:11px; border-radius:4px; cursor:pointer;">Del</button>
+                    </td>
+                </tr>
+            `).join('');
+        } else if (res.status === 401) {
+            adminLogout();
+        }
+    } catch (e) {}
+}
+
+async function createUser() {
+    const username = document.getElementById('newUsername').value.trim();
+    const hwid = document.getElementById('newHwid').value.trim();
+    const duration = document.getElementById('newDuration').value;
+
+    if (!username) {
+        showToast('Username required');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/admin/users/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+            body: JSON.stringify({ username, hwid, duration })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+            showToast('User created');
+            document.getElementById('newUsername').value = '';
+            document.getElementById('newHwid').value = '';
+            loadUsers();
+            fetchStats();
+        }
+    } catch (e) {
+        showToast('Error creating user');
+    }
+}
+
+async function toggleUser(id) {
+    try {
+        await fetch('/api/admin/users/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+            body: JSON.stringify({ id })
+        });
+        loadUsers();
+    } catch (e) {}
+}
+
+async function deleteUser(id) {
+    if (!confirm('Delete this license?')) return;
+    try {
+        await fetch('/api/admin/users/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+            body: JSON.stringify({ id })
+        });
+        loadUsers();
+        fetchStats();
+    } catch (e) {}
+}
+
+fetchStats();
+setInterval(fetchStats, 8000);
 </script>
 </body>
 </html>
